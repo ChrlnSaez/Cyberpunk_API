@@ -1,8 +1,9 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
 
-const userRoutes = require("./src/routes/userRoutes");
+const userRoutes = require('./src/routes/userRoutes');
+const authRoutes = require('./src/routes/authRoutes');
 
 (async () => {
   const app = express();
@@ -10,9 +11,9 @@ const userRoutes = require("./src/routes/userRoutes");
   // Middlewares
   app.use(
     cors({
-      origin: "*",
-      methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-      allowedHeaders: ["Content-Type", "Authorization"],
+      origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true,
     })
   );
@@ -20,10 +21,15 @@ const userRoutes = require("./src/routes/userRoutes");
   app.use(express.urlencoded({ extended: true }));
 
   // For development use local mongodb instance instead of Atlas
-  await mongoose.connect("mongodb://localhost:27017/cyberpunk");
-  console.log("MongoDB Connected");
+  await mongoose.connect('mongodb://localhost:27017/cyberpunk');
+  console.log('MongoDB Connected');
 
-  app.use("/api/users", userRoutes);
+  app.get('/', (req, res) => {
+    return res.send({ message: 'Hello World' });
+  });
+
+  app.use('/api/users', userRoutes);
+  app.use('/api/auth', authRoutes);
 
   const PORT = process.env.PORT || 8080;
 

@@ -10,6 +10,8 @@ module.exports.registerController = async (req, res) => {
   if (isEmailExist)
     return res.status(400).send({ error: 'User already exist ' });
 
+  console.log('Hello World');
+
   password = await generate.hash(password);
 
   const user = new User({

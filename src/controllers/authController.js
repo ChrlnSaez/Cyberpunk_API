@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Student = require('../models/student');
 
 const generate = require('../helpers/generate');
 const verify = require('../helpers/verify');
@@ -21,6 +22,9 @@ module.exports.registerController = async (req, res) => {
   });
 
   await user.save();
+
+  if (user.role === 'student') {
+  }
 
   return res.status(201).send({ message: 'User Created' });
 };

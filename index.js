@@ -1,39 +1,43 @@
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
+/** @format */
 
-const userRoutes = require('./src/routes/userRoutes');
-const authRoutes = require('./src/routes/authRoutes');
+const express = require("express")
+const cors = require("cors")
+const mongoose = require("mongoose")
 
-(async () => {
-  const app = express();
+const userRoutes = require("./src/routes/userRoutes")
+const authRoutes = require("./src/routes/authRoutes")
 
-  // Middlewares
-  app.use(
-    cors({
-      origin: '*',
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-      credentials: true,
+;(async () => {
+    const app = express()
+
+    // Middlewares
+    app.use(
+        cors({
+            origin: "*",
+            methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+            allowedHeaders: ["Content-Type", "Authorization"],
+            credentials: true,
+        })
+    )
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
+
+    // For development use local mongodb instance instead of Atlas
+    await mongoose.connect("mongodb://localhost:27017/cyberpunk")
+    console.log("MongoDB Connected")
+
+    app.get("/", (req, res) => {
+        return res.send({ message: "Hello World" })
     })
-  );
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
 
-  // For development use local mongodb instance instead of Atlas
-  await mongoose.connect('mongodb://localhost:27017/cyberpunk');
-  console.log('MongoDB Connected');
+    app.use("/api/users", userRoutes)
+    app.use("/api/auth", authRoutes)
 
-  app.get('/', (req, res) => {
-    return res.send({ message: 'Hello World' });
-  });
+    const PORT = process.env.PORT || 8080
 
-  app.use('/api/users', userRoutes);
-  app.use('/api/auth', authRoutes);
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`)
+    })
 
-  const PORT = process.env.PORT || 8080;
-
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-})();
+    console.log("test")
+})()

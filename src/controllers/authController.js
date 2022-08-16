@@ -24,6 +24,11 @@ module.exports.registerController = async (req, res) => {
   await user.save();
 
   if (user.role === 'student') {
+    await Student.create({ user: user._id });
+  }
+
+  if (user.role === 'teacher') {
+    await Teacher.create({ user: user._id });
   }
 
   return res.status(201).send({ message: 'User Created' });

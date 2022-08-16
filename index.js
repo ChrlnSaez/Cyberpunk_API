@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 
 const userRoutes = require('./src/routes/userRoutes');
 const authRoutes = require('./src/routes/authRoutes');
+const activityRoutes = require('./src/routes/actRoutes');
+const lessonMaterial = require('./src/lessmatRoutes/');
+
+const teacher = express();
 
 (async () => {
   const app = express();
@@ -30,6 +34,8 @@ const authRoutes = require('./src/routes/authRoutes');
 
   app.use('/api/users', userRoutes);
   app.use('/api/auth', authRoutes);
+  teacher.use('/api/activity', activityRoutes);
+  teacher.use('/api/lesson_material', lessonMaterial);
 
   const PORT = process.env.PORT || 8080;
 

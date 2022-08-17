@@ -6,6 +6,7 @@ const userRoutes = require('./src/routes/userRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const activityRoutes = require('./src/routes/actRoutes');
 const lessonMaterial = require('./src/lessmatRoutes/');
+const zoomRecords = require('./src/routes/zoomrecRoutes');
 
 const teacher = express();
 
@@ -36,6 +37,7 @@ const teacher = express();
   app.use('/api/auth', authRoutes);
   teacher.use('/api/activity', activityRoutes);
   teacher.use('/api/lesson_material', lessonMaterial);
+  teacher.use('/api/recorded-meetings', zoomRecords);
 
   const PORT = process.env.PORT || 8080;
 

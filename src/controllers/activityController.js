@@ -26,7 +26,7 @@ const createActivity = async (req, res) => {
 
     // add doc to db
     try {
-        const activity = await Workout.create({ student, batch, activities, course })
+        const activity = await Activities.create({ student, batch, activities, course })
         res.status(200).json(activity)
     } catch (error) {
         res.status(400).json({ error: error.message })

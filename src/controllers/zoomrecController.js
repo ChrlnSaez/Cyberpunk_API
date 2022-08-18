@@ -7,13 +7,13 @@ const getRecords = async (req, res) => {
     res.status(200).json(records);
 };
 
-// get a single workout
+// get a single record
 const getRecord = async (req, res) => {
     const { id } = req.params
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such recorded zoom' })
     }
-    const record = await Workout.findById(id)
+    const record = await Recordedzoom.findById(id)
     if (!record) {
         return res.status(400).json({ error: 'No such recorded zoom' })
     }

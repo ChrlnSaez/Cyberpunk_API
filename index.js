@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const userRoutes = require('./src/routes/userRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 
+const classRoutes = require('./src/routes/classRoutes'); // classroom Route - Joseph
+
 (async () => {
   const app = express();
 
@@ -30,6 +32,7 @@ const authRoutes = require('./src/routes/authRoutes');
 
   app.use('/api/users', userRoutes);
   app.use('/api/auth', authRoutes);
+  app.use('/api/classroom', classRoutes); //Classroom - Joseph
 
   const PORT = process.env.PORT || 8080;
 

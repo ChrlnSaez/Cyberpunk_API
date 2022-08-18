@@ -7,6 +7,7 @@ const authRoutes = require('./src/routes/authRoutes');
 const activityRoutes = require('./src/routes/actRoutes');
 const lessonMaterial = require('./src/lessmatRoutes/');
 const zoomRecords = require('./src/routes/zoomrecRoutes');
+const classroomAttendance = require('./src/routes/viewAttendanceRoutes')
 
 const teacher = express();
 
@@ -38,6 +39,7 @@ const teacher = express();
   teacher.use('/api/activity', activityRoutes);
   teacher.use('/api/lesson_material', lessonMaterial);
   teacher.use('/api/recorded-meetings', zoomRecords);
+  teacher.use('/api/classroom-attendance', classroomAttendance);
 
   const PORT = process.env.PORT || 8080;
 

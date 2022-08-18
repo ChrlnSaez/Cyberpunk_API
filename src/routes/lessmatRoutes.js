@@ -9,8 +9,8 @@ const {
 } = require('../controllers/lessmatController');
 
 // Routes for Lesson Materials
-router.get('/', getLessonMaterial);
-router.get('/:id', getLessonMaterials);
-router.post('/', createLessonMaterial);
-router.delete('/:id', deleteLessonMaterial);
-router.patch('/:id', updateLessonMaterial);
+router.get('/lesson_material/', getLessonMaterial);
+router.get('/lesson_material/:id', getLessonMaterials);
+router.post('/lesson_material/', createLessonMaterial);
+router.delete('/lesson_material/:id', deleteLessonMaterial);
+router.patch('/lesson_material/:id', updateLessonMaterial);

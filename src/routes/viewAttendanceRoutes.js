@@ -3,4 +3,4 @@ const express = require('express');
 const { viewAllAttendance } = require('../controllers/viewAttendanceController');
 
 // Route
-router.get('/', viewAllAttendance);
+router.get('/classroom-attendance', viewAllAttendance);

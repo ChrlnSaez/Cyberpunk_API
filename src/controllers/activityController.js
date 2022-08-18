@@ -1,49 +1,64 @@
-const Teacher = require('../models/activity');
+const Activities = require('../models/activity');
 const mongoose = require('mongoose');
 
 // get all activities
 const getActivities = async (req, res) => {
-    try {
-        // logic
-    } catch (error) {
-        // error handler
-    }
+    const activity = await Activities.find({}).sort({ createdAt: -1 })
+    res.status(200).json(activity);
 };
 
 // get single activity
 const getActivity = async (req, res) => {
-    try {
-        // logic
-    } catch (error) {
-        // error handler
+    const { id } = req.params
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: 'No such activity' })
     }
+    const activity = await Activities.findById(id)
+    if (!activity) {
+        return res.status(400).json({ error: 'No such activity' })
+    }
+    res.status(200).json(activity)
 };
 
 // create a new assignment
 const createActivity = async (req, res) => {
+    const { student, batch, activities, course } = req.body
+
+    // add doc to db
     try {
-        // logic
+        const activity = await Workout.create({ student, batch, activities, course })
+        res.status(200).json(activity)
     } catch (error) {
-        // error handler
+        res.status(400).json({ error: error.message })
     }
 };
 
 // delete a activity
 const deleteActivity = async (req, res) => {
-    try {
-        // logic
-    } catch (error) {
-        // error handler
+    const { id } = req.params
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: 'No such activity' })
     }
+    const activity = await Activities.findOneAndDelete({ _id: id })
+    if (!activity) {
+        return res.status(400).json({ error: 'No such activity' })
+    }
+    res.status(200).json(activity)
 };
 
 // update a activity
 const updateActivity = async (req, res) => {
-    try {
-        // logic
-    } catch (error) {
-        // error handler
+    const { id } = req.params
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: 'No such activity' })
     }
+    const activity = await Workout.findOneAndUpdate({ _id: id }, {
+        ...req.body
+    })
+    if (!activity) {
+        return res.status(400).json({ error: 'No such activity' })
+    }
+    res.status(200).json(activity)
 };
 
 module.exports = {

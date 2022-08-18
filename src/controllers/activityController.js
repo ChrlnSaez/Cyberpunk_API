@@ -52,7 +52,7 @@ const updateActivity = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No such activity' })
     }
-    const activity = await Workout.findOneAndUpdate({ _id: id }, {
+    const activity = await Activities.findOneAndUpdate({ _id: id }, {
         ...req.body
     })
     if (!activity) {

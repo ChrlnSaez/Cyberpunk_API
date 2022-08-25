@@ -1,43 +1,84 @@
-const User = require('../models/user');
+const Student = require('../models/studentModel');
+const Teacher = require('../models/teacherModel');
 
 const generate = require('../helpers/generate');
 const verify = require('../helpers/verify');
 
-module.exports.registerController = async (req, res) => {
-  let { email, password, firstName, lastName, role } = req.body;
-  const isEmailExist = await User.findOne({ email });
+module.exports.studentRegisterController = async (req, res) => {
+  let { email, password, firstName, lastName } = req.body;
+  const isEmailExist = await Student.findOne({ email });
 
   if (isEmailExist)
-    return res.status(400).send({ error: 'User already exist ' });
+    return res.status(400).send({ error: 'Student already exist ' });
 
   password = await generate.hash(password);
 
-  const user = new User({
+  const student = new Student({
     firstName,
     lastName,
     email,
     password,
-    ...(role && { role }),
   });
 
-  await user.save();
+  await student.save();
 
-  return res.status(201).send({ message: 'User Created' });
+  return res.status(201).send({ message: 'Student Created' });
 };
 
-module.exports.loginController = async (req, res) => {
+module.exports.studentLoginController = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const student = await Student.findOne({ email });
 
-  if (!user) return res.status(400).send({ error: 'User does not exist' });
+  if (!student)
+    return res.status(400).send({ error: 'Student does not exist' });
 
-  const isPasswordValid = await verify.hash(password, user.password);
+  const isPasswordValid = await verify.hash(password, student.password);
 
   if (!isPasswordValid)
     return res.status(400).send({ error: 'Credentials are invalid' });
 
-  const token = generate.jwt({ id: user._id, role: user.role });
+  const token = generate.jwt({ id: student._id, role: student.role });
 
-  return res.status(200).send({ message: 'User is now logged in', token });
+  return res.status(200).send({ message: 'Student is now logged in', token });
+};
+
+//Teacher Authentication
+module.exports.teacherRegisterController = async (req, res) => {
+  let { email, password, firstName, lastName } = req.body;
+  const isEmailExist = await Teacher.findOne({ email });
+
+  if (isEmailExist)
+    return res.status(400).send({ error: 'Teacher already exist ' });
+
+  password = await generate.hash(password);
+
+  const teacher = new Teacher({
+    firstName,
+    lastName,
+    email,
+    password,
+  });
+
+  await teacher.save();
+
+  return res.status(201).send({ message: 'Teacher Created' });
+};
+
+module.exports.teacherLoginController = async (req, res) => {
+  const { email, password } = req.body;
+
+  const teacher = await Teacher.findOne({ email });
+
+  if (!teacher)
+    return res.status(400).send({ error: 'Teacher does not exist' });
+
+  const isPasswordValid = await verify.hash(password, teacher.password);
+
+  if (!isPasswordValid)
+    return res.status(400).send({ error: 'Credentials are invalid' });
+
+  const token = generate.jwt({ id: teacher._id, role: teacher.role });
+
+  return res.status(200).send({ message: 'Teacher is now logged in', token });
 };

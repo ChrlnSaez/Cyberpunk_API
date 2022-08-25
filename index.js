@@ -2,8 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-const userRoutes = require('./src/routes/userRoutes');
+const studentRoutes = require('./src/routes/studentRoutes');
 const authRoutes = require('./src/routes/authRoutes');
+const teacherRoutes = require('./src/routes/teacherRoutes');
+const classRoomRoutes = require('./src/routes/classroomRoutes');
+const attendanceRoutes = require('./src/routes/attendanceRoutes');
 
 (async () => {
   const app = express();
@@ -21,14 +24,19 @@ const authRoutes = require('./src/routes/authRoutes');
   app.use(express.urlencoded({ extended: true }));
 
   // For development use local mongodb instance instead of Atlas
-  await mongoose.connect('mongodb://localhost:27017/cyberpunk');
+  await mongoose.connect(
+    'mongodb+srv://chrlnsaez:PpbcIWCiFaShPikc@cyberpunk.wxbpk6r.mongodb.net/?retryWrites=true&w=majority'
+  );
   console.log('MongoDB Connected');
 
-  app.get('/', (req, res) => {
+  app.get('/', (_req, res) => {
     return res.send({ message: 'Hello World' });
   });
 
-  app.use('/api/users', userRoutes);
+  app.use('/api/student', studentRoutes);
+  app.use('/api/teacher', teacherRoutes);
+  app.use('/api/classroom', classRoomRoutes);
+  app.use('/api/attendance', attendanceRoutes);
   app.use('/api/auth', authRoutes);
 
   const PORT = process.env.PORT || 8080;

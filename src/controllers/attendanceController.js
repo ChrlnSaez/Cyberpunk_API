@@ -1,10 +1,10 @@
 const Student = require('../models/studentModel');
 const Classroom = require('../models/classroomModel');
 const Attendance = require('../models/attendanceModel');
-const nodemailer = require('nodemailer');
 
 const isToday = require('date-fns/isToday');
 const format = require('date-fns/format');
+const client = require('../helpers/client');
 
 module.exports.getAllAttendances = async (_req, res) => {
   try {
@@ -129,14 +129,6 @@ module.exports.createAttendance = async (req, res) => {
 
     await attendance.save();
 
-    const client = nodemailer.createTransport({
-      service: 'Gmail',
-      auth: {
-        user: 'testemailtest890@gmail.com',
-        pass: 'tyceknlmwbpxvwtd',
-      },
-    });
-
     const popStudent = await Attendance.populate(attendance, {
       path: 'student',
     });
@@ -145,7 +137,7 @@ module.exports.createAttendance = async (req, res) => {
     const today = format(attendance.createdAt, 'MMMM dd yyyy');
     const status = attendance.status;
 
-    client.sendMail({
+    client().sendMail({
       from: 'testemailtest890@gmail.com',
       to: popStudent.student.email,
       subject: 'Attedance Status',

@@ -24,15 +24,21 @@ const attendanceRoutes = require('./src/routes/attendanceRoutes');
   app.use(express.urlencoded({ extended: true }));
 
   // For development use local mongodb instance instead of Atlas
+  // await mongoose.connect('mongodb://localhost:27017/cyberpunk');
+
+  // MongoDB cluster
   await mongoose.connect(
     'mongodb+srv://chrlnsaez:PpbcIWCiFaShPikc@cyberpunk.wxbpk6r.mongodb.net/?retryWrites=true&w=majority'
   );
+
   console.log('MongoDB Connected');
 
+  // Test for initial deployment
   app.get('/', (_req, res) => {
     return res.send({ message: 'Hello World' });
   });
 
+  // Routes
   app.use('/api/student', studentRoutes);
   app.use('/api/teacher', teacherRoutes);
   app.use('/api/classroom', classRoomRoutes);

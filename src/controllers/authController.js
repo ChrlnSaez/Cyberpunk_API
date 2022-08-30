@@ -4,23 +4,39 @@ const Teacher = require('../models/teacherModel');
 const generate = require('../helpers/generate');
 const verify = require('../helpers/verify');
 
+const short = require('short-uuid');
+const client = require('../helpers/client');
+
 module.exports.studentRegisterController = async (req, res) => {
-  let { email, password, firstName, lastName } = req.body;
+  let { email, firstName, lastName } = req.body;
   const isEmailExist = await Student.findOne({ email });
 
   if (isEmailExist)
     return res.status(400).send({ error: 'Student already exist ' });
 
-  password = await generate.hash(password);
+  const shortId = short();
+
+  let password = shortId.new();
+
+  const hashPassword = await generate.hash(password);
 
   const student = new Student({
     firstName,
     lastName,
     email,
-    password,
+    password: hashPassword,
   });
 
   await student.save();
+
+  const fullName = `${student.firstName} ${student.lastName}`;
+
+  client().sendMail({
+    from: 'testemailtest890@gmail.com',
+    to: student.email,
+    subject: 'Student Credentials',
+    text: `Hello ${fullName}\nYour password for your account: ${student.email} is ${password}.`,
+  });
 
   return res.status(201).send({ message: 'Student Created' });
 };

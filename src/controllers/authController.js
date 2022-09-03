@@ -61,22 +61,35 @@ module.exports.studentLoginController = async (req, res) => {
 
 //Teacher Authentication
 module.exports.teacherRegisterController = async (req, res) => {
-  let { email, password, firstName, lastName } = req.body;
+  let { email, firstName, lastName } = req.body;
   const isEmailExist = await Teacher.findOne({ email });
 
   if (isEmailExist)
     return res.status(400).send({ error: 'Teacher already exist ' });
 
-  password = await generate.hash(password);
+  const shortId = short();
+
+  let password = shortId.new();
+
+  const hashPassword = await generate.hash(password);
 
   const teacher = new Teacher({
     firstName,
     lastName,
     email,
-    password,
+    password: hashPassword,
   });
 
   await teacher.save();
+
+  const fullName = `${teacher.firstName} ${teacher.lastName}`;
+
+  client().sendMail({
+    from: 'testemailtest890@gmail.com',
+    to: teacher.email,
+    subject: 'Student Credentials',
+    text: `Hello ${fullName}\nYour password for your account: ${teacher.email} is ${password}.`,
+  });
 
   return res.status(201).send({ message: 'Teacher Created' });
 };

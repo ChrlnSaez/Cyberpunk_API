@@ -14,7 +14,7 @@ const router = Router();
 
 router.post('/', authorizer, createAttendance);
 router.get('/', authorizer, getAllAttendances);
-router.get('/student/current/', authorizer, getCurrentStudentAttendance);
+router.get('/student/current', authorizer, getCurrentStudentAttendance);
 router.get('/student', authorizer, getStudentsAttendances);
 router.get('/classroom', authorizer, getClassroomAttendances);
 router.get('/:id', authorizer, getAttendance);
